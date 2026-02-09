@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Xác nhận tham dự</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body { font-family: Arial; background:#f5f6f8; padding:30px; text-align:center }
+.box { background:#fff; max-width:420px; margin:auto; padding:30px; border-radius:12px }
+button { width:100%; padding:15px; margin-top:15px; font-size:16px; border:none; border-radius:8px }
+.yes { background:#1a73e8; color:#fff }
+.no { background:#e0e0e0 }
+</style>
+</head>
+
+<body>
+<div class="box">
+  <h2>XÁC NHẬN THAM DỰ SỰ KIỆN</h2>
+  <p>Kính gửi</p>
+  <h3 id="guestName">Quý khách</h3>
+
+  <button class="yes" onclick="submitResponse('Có tham dự')">✅ Tôi sẽ tham dự</button>
+  <button class="no" onclick="submitResponse('Không tham dự')">❌ Tôi xin phép không tham dự</button>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const name = params.get("name");
+const id = params.get("id");
+
+document.getElementById("guestName").innerText =
+  name ? decodeURIComponent(name) : "Quý khách";
+
+function submitResponse(status) {
+  fetch("https://script.google.com/macros/s/AKfycbzuUVciAaZ2X8xF68GFr_wzhpSP12UR_O5F4MzYuyCTgMKhmjUFZjx0GsoUPac5hv3zfg/exec", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, id, status })
+  })
+  .then(r => r.json())
+  .then(() => alert("BTC đã ghi nhận xác nhận. Xin cảm ơn!"))
+  .catch(() => alert("Có lỗi xảy ra, vui lòng thử lại."));
+}
+</script>
+</body>
+</html>
